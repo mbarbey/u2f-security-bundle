@@ -5,7 +5,6 @@ namespace Mbarbey\U2fSecurityBundle\Service;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Samyoul\U2F\U2FServer\U2FServer;
 use Samyoul\U2F\U2FServer\U2FException;
-use Mbarbey\U2fSecurityBundle\Entity\Key;
 use Mbarbey\U2fSecurityBundle\Model\U2fRegistration\U2fRegistrationInterface;
 use Mbarbey\U2fSecurityBundle\Model\User\U2fUserInterface;
 use Mbarbey\U2fSecurityBundle\Model\U2fAuthentication\U2fAuthenticationInterface;
@@ -18,6 +17,7 @@ use Mbarbey\U2fSecurityBundle\Event\Registration\U2fRegistrationFailureEvent;
 use Mbarbey\U2fSecurityBundle\Event\Authentication\U2fPreAuthenticationEvent;
 use Mbarbey\U2fSecurityBundle\Event\Authentication\U2fAuthenticationFailureEvent;
 use Mbarbey\U2fSecurityBundle\Event\Authentication\U2fPostAuthenticationEvent;
+use Mbarbey\U2fSecurityBundle\Model\Key\U2fKeyInterface;
 
 class U2fSecurity
 {
@@ -49,7 +49,7 @@ class U2fSecurity
         return ['request' => $jsRequest, 'signatures' => $jsSignatures];
     }
 
-    public function validateRegistration(U2fUserInterface $user, U2fRegistrationInterface $registration)
+    public function validateRegistration(U2fUserInterface $user, U2fRegistrationInterface $registration, U2fKeyInterface $key)
     {
         $u2fRequest = $this->session->get('registrationRequest');
         $u2fResponse = (object)json_decode($registration->getResponse(), true);
@@ -66,7 +66,6 @@ class U2fSecurity
             throw $e;
         }
 
-        $key = new Key();
         $key->setCertificate($validatedRegistration->getCertificate());
         $key->setCounter($validatedRegistration->getCounter());
         $key->setKeyHandle($validatedRegistration->getKeyHandle());

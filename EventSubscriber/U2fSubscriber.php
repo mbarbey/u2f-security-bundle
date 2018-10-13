@@ -7,12 +7,12 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Mbarbey\U2fSecurityBundle\Entity\User;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Mbarbey\U2fSecurityBundle\Event\Authentication\U2fAuthenticationRequiredEvent;
+use Mbarbey\U2fSecurityBundle\Model\User\U2fUserInterface;
 
 class U2fSubscriber implements EventSubscriberInterface
 {
@@ -32,7 +32,7 @@ class U2fSubscriber implements EventSubscriberInterface
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
         $user = $event->getAuthenticationToken()->getUser();
-        if ($user instanceof User && $user->getU2fKeys()->count()) {
+        if ($user instanceof U2fUserInterface && $user->getU2fKeys()->count()) {
             $shouldAuthenticate = new U2fAuthenticationRequiredEvent($user);
             $this->dispatcher->dispatch($shouldAuthenticate::getName(), $shouldAuthenticate);
             if ($shouldAuthenticate->mustAuthenticate()) {
