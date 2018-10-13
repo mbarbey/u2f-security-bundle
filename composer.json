@@ -1,0 +1,36 @@
+{
+	"name" : "mbarbey/u2f-security-bundle",
+	"type" : "symfony-bundle",
+	"description" : "Symfony bundle allowing to use U2F security keys as two factor authentication",
+	"homepage" : "https://github.com/mbarbey/u2f-security-bundle",
+	"license" : "MIT",
+	"keywords": ["security", "u2f", "two factor", "authentication", "yubikey"],
+	"authors" : [
+		{
+			"name" : "Michael Barbey",
+			"email" : "michael@barbey-family.ch"
+		}
+	],
+	"require" : {
+		"php" : "^7.1.3",
+		"samyoul/u2f-php-server": "^1.1"
+	},
+	"require-dev" : {
+		"symfony/dependency-injection" : "~3.4|~4.0",
+		"symfony/event-dispatcher": "~3.4|~4.0",
+		"symfony/http-foundation" : "~3.4|~4.0",
+		"symfony/http-kernel" : "~3.4|~4.0",
+		"symfony/routing" : "~3.4|~4.0",
+		"symfony/yaml" : "~3.4|~4.0",
+		"symfony/security" : "~3.4|~4.0"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"Mbarbey\\U2fSecurityBundle\\" : ""
+		},
+		"exclude-from-classmap" : [
+			"/Tests/"
+		]
+	},
+	"minimum-stability" : "dev"
+}
