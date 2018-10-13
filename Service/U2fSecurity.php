@@ -76,8 +76,6 @@ class U2fSecurity
         $this->session->remove('registrationRequest');
 
         $this->dispatcher->dispatch(U2fPostRegistrationEvent::getName(), new U2fPostRegistrationEvent($user, $key));
-
-        return $key;
     }
 
     public function canAuthenticate($appId, U2fUserInterface $user)

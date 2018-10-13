@@ -10,12 +10,15 @@
     </parameters>
 
     <services>
-        <service id="mbarbey_u2f_security.u2fsecurity" class="%mbarbey_u2f_security.u2fservice.class%" />
+        <service id="Mbarbey\U2fSecurityBundle\Service\U2fSecurity" class="%mbarbey_u2f_security.u2fservice.class%">
+            <argument type="service" id="session" />
+            <argument type="service" id="event_dispatcher" />
+        </service>
         <service id="mbarbey_u2f_security.subscriber" class="%mbarbey_u2f_security.u2fsubscriber.class%">
             <tag name="kernel.event_subscriber" />
             <argument type="service" id="router" />
             <argument type="service" id="session" />
-            <argument type="service" id="dispatcher" />
+            <argument type="service" id="event_dispatcher" />
         </service>
     </services>
 

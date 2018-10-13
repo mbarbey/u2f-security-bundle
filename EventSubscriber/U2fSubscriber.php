@@ -24,7 +24,6 @@ class U2fSubscriber implements EventSubscriberInterface
 
     public function __construct(RouterInterface $router, SessionInterface $session, EventDispatcherInterface $dispatcher)
     {
-        die();
         $this->router = $router;
         $this->session = $session;
         $this->dispatcher = $dispatcher;
