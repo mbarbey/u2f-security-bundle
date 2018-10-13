@@ -26,6 +26,12 @@ Important point, U2F keys only work on HTTPS requests. So you will need an SSL c
 Installation
 ------------
 
+Globally, the installation process can be splitted into three parts :
+
+1. Creating entities and models
+2. Creating controller
+3. Whilisting Url(s)
+
 Now let's start together !
 
 First you need to install the bundle through composer !
