@@ -62,7 +62,7 @@ class U2fPostAuthenticationEvent extends Event
      *
      * @return U2fUserInterface
      */
-    public function getUser(): U2fUserInterface
+    public function getUser()
     {
         return $this->user;
     }
@@ -73,7 +73,7 @@ class U2fPostAuthenticationEvent extends Event
      *
      * @return U2fKeyInterface|NULL
      */
-    public function getKey(): ?U2fKeyInterface
+    public function getKey()
     {
         return $this->key;
     }

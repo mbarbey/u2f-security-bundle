@@ -70,7 +70,7 @@ class U2fPreAuthenticationEvent extends Event
      *
      * @return U2fUserInterface
      */
-    public function getUser(): U2fUserInterface
+    public function getUser()
     {
         return $this->user;
     }

@@ -57,7 +57,7 @@ class U2fAuthenticationFailureEvent extends Event
      *
      * @return U2fUserInterface
      */
-    public function getUser(): U2fUserInterface
+    public function getUser()
     {
         return $this->user;
     }
