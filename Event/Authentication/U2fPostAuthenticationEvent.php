@@ -14,7 +14,6 @@ namespace Mbarbey\U2fSecurityBundle\Event\Authentication;
 use Symfony\Component\EventDispatcher\Event;
 use Mbarbey\U2fSecurityBundle\Model\User\U2fUserInterface;
 use Mbarbey\U2fSecurityBundle\Model\Key\U2fKeyInterface;
-use Mbarbey\U2fSecurityBundle\Event\U2fEvents;
 
 /**
  * Post U2F authentication event
@@ -22,7 +21,6 @@ use Mbarbey\U2fSecurityBundle\Event\U2fEvents;
  * An event dispatched everytime an authentication is performed, no matter if it was a success or a failure.
  *
  * This event contain the user who tried to authenticate and *can* contain the key if the authentication was a success.
- * If the key is provided, it mean that the authentication was a success.
  * The counter of the key is already updated.
  *
  * @author Michael Barbey <michael@barbey-family.ch>
@@ -40,12 +38,12 @@ class U2fPostAuthenticationEvent extends Event
      */
     public static function getName(): string
     {
-        return U2fEvents::U2F_POST_AUTHENTICATION;
+        return 'u2f.authentication.after';
     }
 
     /**
-     * @param U2fUserInterface $user
-     * @param U2fKeyInterface $key
+     * @param U2fUserInterface $user    The user who tried to authenticate
+     * @param U2fKeyInterface $key      The key used if the authentication was a success
      */
     public function __construct(U2fUserInterface $user, U2fKeyInterface $key = null)
     {

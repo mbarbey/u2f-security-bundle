@@ -13,7 +13,6 @@ namespace Mbarbey\U2fSecurityBundle\Event\Authentication;
 
 use Symfony\Component\EventDispatcher\Event;
 use Mbarbey\U2fSecurityBundle\Model\User\U2fUserInterface;
-use Mbarbey\U2fSecurityBundle\Event\U2fEvents;
 
 /**
  * Pre U2F authentication event
@@ -41,12 +40,12 @@ class U2fPreAuthenticationEvent extends Event
      */
     public static function getName(): string
     {
-        return U2fEvents::U2F_PRE_AUTHENTICATION;
+        return 'u2f.authentication.before';
     }
 
     /**
-     * @param string $appId
-     * @param U2fUserInterface $user
+     * @param string $appId             The appId for the authentication
+     * @param U2fUserInterface $user    The user who will be requested to authenticate with a security key
      */
     public function __construct(string $appId, U2fUserInterface $user)
     {

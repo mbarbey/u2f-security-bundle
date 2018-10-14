@@ -32,7 +32,7 @@ class U2fSecurity
 
     public function canRegister(U2fUserInterface $user, $appId = null)
     {
-        $event = new U2fPreRegistrationEvent($user, $appId);
+        $event = new U2fPreRegistrationEvent($appId, $user);
         $this->dispatcher->dispatch($event::getName(), $event);
 
         return $event;
@@ -114,7 +114,7 @@ class U2fSecurity
             );
         } catch (\Exception $e) {
             $counter = $this->session->get('u2f_registration_error_counter', 0) +1;
-            $error = new U2fAuthenticationFailureEvent($user, $e->getMessage(), $counter);
+            $error = new U2fAuthenticationFailureEvent($user, $e, $counter);
             $this->dispatcher->dispatch($error->getName(), $error);
             $this->dispatcher->dispatch(U2fPostAuthenticationEvent::getName(), new U2fPostAuthenticationEvent($user));
 

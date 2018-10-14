@@ -13,7 +13,6 @@ namespace Mbarbey\U2fSecurityBundle\Event\Authentication;
 
 use Symfony\Component\EventDispatcher\Event;
 use Mbarbey\U2fSecurityBundle\Model\User\U2fUserInterface;
-use Mbarbey\U2fSecurityBundle\Event\U2fEvents;
 
 /**
  * U2F authentication failure event
@@ -37,15 +36,15 @@ class U2fAuthenticationFailureEvent extends Event
      */
     public static function getName(): string
     {
-        return U2fEvents::U2F_AUTHENTICATION_FAILURE;
+        return 'u2f.authentication.failure';
     }
 
     /**
      * @param U2fUserInterface $user    The user who failed to authenticate
-     * @param string $error             An error message explaining why he failed
+     * @param \Exception $error         The exception which triggered the failure
      * @param int $failureCounter       The number of consecutive fails of this user
      */
-    public function __construct(U2fUserInterface $user, string $error, int $failureCounter = 1)
+    public function __construct(U2fUserInterface $user, \Exception $error, int $failureCounter = 1)
     {
         $this->user = $user;
         $this->error = $error;
@@ -63,11 +62,11 @@ class U2fAuthenticationFailureEvent extends Event
     }
 
     /**
-     * Return an error message explaining why the authentication failed.
+     * Return the exception which triggered the failure
      *
-     * @return string
+     * @return \Exception
      */
-    public function getError(): string
+    public function getError(): \Exception
     {
         return $this->error;
     }

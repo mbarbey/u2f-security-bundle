@@ -13,7 +13,6 @@ namespace Mbarbey\U2fSecurityBundle\Event\Authentication;
 
 use Symfony\Component\EventDispatcher\Event;
 use Mbarbey\U2fSecurityBundle\Model\User\U2fUserInterface;
-use Mbarbey\U2fSecurityBundle\Event\U2fEvents;
 
 /**
  * U2F authentication required event
@@ -40,11 +39,11 @@ class U2fAuthenticationRequiredEvent extends Event
      */
     public static function getName(): string
     {
-        return U2fEvents::U2F_AUTHENTICATION_REQUIRED;
+        return 'u2f.authentication.required';
     }
 
     /**
-     * @param U2fUserInterface $user
+     * @param U2fUserInterface $user    The user who will be requested to authenticate with a security key
      */
     public function __construct(U2fUserInterface $user)
     {

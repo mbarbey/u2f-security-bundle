@@ -14,7 +14,6 @@ namespace Mbarbey\U2fSecurityBundle\Event\Authentication;
 use Symfony\Component\EventDispatcher\Event;
 use Mbarbey\U2fSecurityBundle\Model\User\U2fUserInterface;
 use Mbarbey\U2fSecurityBundle\Model\Key\U2fKeyInterface;
-use Mbarbey\U2fSecurityBundle\Event\U2fEvents;
 
 /**
  * U2F authentication success event
@@ -37,12 +36,12 @@ class U2fAuthenticationSuccessEvent extends Event
      */
     public static function getName(): string
     {
-        return U2fEvents::U2F_AUTHENTICATION_SUCCESS;
+        return 'u2f.authentication.success';
     }
 
     /**
-     * @param U2fUserInterface $user
-     * @param U2fKeyInterface $key
+     * @param U2fUserInterface $user    The user who successfully authenticated
+     * @param U2fKeyInterface $key      The security key used during the authentication
      */
     public function __construct(U2fUserInterface $user, U2fKeyInterface $key)
     {
