@@ -33,7 +33,9 @@ class U2fSecurity
     public function canRegister(U2fUserInterface $user, $appId = null)
     {
         $event = new U2fPreRegistrationEvent($appId, $user);
-        $this->dispatcher->dispatch($event::getName(), $event);
+        if ($this->dispatcher->hasListeners($event->getName())) {
+            $this->dispatcher->dispatch($event::getName(), $event);
+        }
 
         return $event;
     }
@@ -62,8 +64,12 @@ class U2fSecurity
                 }
             }
         } catch (\Exception $e) {
-            $this->dispatcher->dispatch(U2fRegistrationFailureEvent::getName(), new U2fRegistrationFailureEvent($user, $e));
-            $this->dispatcher->dispatch(U2fPostRegistrationEvent::getName(), new U2fPostRegistrationEvent($user));
+            if ($this->dispatcher->hasListeners(U2fRegistrationFailureEvent::getName())) {
+                $this->dispatcher->dispatch(U2fRegistrationFailureEvent::getName(), new U2fRegistrationFailureEvent($user, $e));
+            }
+            if ($this->dispatcher->hasListeners(U2fPostRegistrationEvent::getName())) {
+                $this->dispatcher->dispatch(U2fPostRegistrationEvent::getName(), new U2fPostRegistrationEvent($user));
+            }
             throw $e;
         }
 
@@ -72,17 +78,24 @@ class U2fSecurity
         $key->setKeyHandle($validatedRegistration->getKeyHandle());
         $key->setPublicKey($validatedRegistration->getPublicKey());
 
-        $this->dispatcher->dispatch(U2fRegistrationSuccessEvent::getName(), new U2fRegistrationSuccessEvent($user, $key));
+        if ($this->dispatcher->hasListeners(U2fRegistrationSuccessEvent::getName())) {
+            $this->dispatcher->dispatch(U2fRegistrationSuccessEvent::getName(), new U2fRegistrationSuccessEvent($user, $key));
+        }
 
         $this->session->remove('registrationRequest');
 
-        $this->dispatcher->dispatch(U2fPostRegistrationEvent::getName(), new U2fPostRegistrationEvent($user, $key));
+        if ($this->dispatcher->hasListeners(U2fPostRegistrationEvent::getName())) {
+            $this->dispatcher->dispatch(U2fPostRegistrationEvent::getName(), new U2fPostRegistrationEvent($user, $key));
+        }
     }
 
     public function canAuthenticate($appId, U2fUserInterface $user)
     {
         $event = new U2fPreAuthenticationEvent($appId, $user);
-        $this->dispatcher->dispatch($event->getName(), $event);
+
+        if ($this->dispatcher->hasListeners($event->getName())) {
+            $this->dispatcher->dispatch($event->getName(), $event);
+        }
 
         if ($event->isAborted()) {
             $this->session->remove('authenticationRequest');
@@ -111,21 +124,28 @@ class U2fSecurity
                 $this->session->get('authenticationRequest'),
                 $user->getU2fKeys()->toArray(),
                 json_decode($authentication->getResponse())
-            );
+                );
         } catch (\Exception $e) {
-            $counter = $this->session->get('u2f_registration_error_counter', 0) +1;
-            $error = new U2fAuthenticationFailureEvent($user, $e, $counter);
-            $this->dispatcher->dispatch($error->getName(), $error);
-            $this->dispatcher->dispatch(U2fPostAuthenticationEvent::getName(), new U2fPostAuthenticationEvent($user));
+            if ($this->dispatcher->hasListeners(U2fAuthenticationFailureEvent::getName())) {
+                $counter = $this->session->get('u2f_registration_error_counter', 0) +1;
+                $this->dispatcher->dispatch(U2fAuthenticationFailureEvent::getName(), new U2fAuthenticationFailureEvent($user, $e, $counter));
+            }
+            if ($this->dispatcher->hasListeners(U2fPostAuthenticationEvent::getName())) {
+                $this->dispatcher->dispatch(U2fPostAuthenticationEvent::getName(), new U2fPostAuthenticationEvent($user));
+            }
 
             throw $e;
         }
 
-        $this->dispatcher->dispatch(U2fAuthenticationSuccessEvent::getName(), new U2fAuthenticationSuccessEvent($user, $updatedKey));
+        if ($this->dispatcher->hasListeners(U2fAuthenticationSuccessEvent::getName())) {
+            $this->dispatcher->dispatch(U2fAuthenticationSuccessEvent::getName(), new U2fAuthenticationSuccessEvent($user, $updatedKey));
+        }
 
         $this->stopRequestingAuthentication();
 
-        $this->dispatcher->dispatch(U2fPostAuthenticationEvent::getName(), new U2fPostAuthenticationEvent($user, $updatedKey));
+        if ($this->dispatcher->hasListeners(U2fPostAuthenticationEvent::getName())) {
+            $this->dispatcher->dispatch(U2fPostAuthenticationEvent::getName(), new U2fPostAuthenticationEvent($user, $updatedKey));
+        }
 
         return $updatedKey;
     }

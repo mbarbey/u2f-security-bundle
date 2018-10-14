@@ -39,9 +39,13 @@ class U2fSubscriber implements EventSubscriberInterface
     {
         $user = $event->getAuthenticationToken()->getUser();
         if ($user instanceof U2fUserInterface && $user->getU2fKeys()->count()) {
-            $shouldAuthenticate = new U2fAuthenticationRequiredEvent($user);
-            $this->dispatcher->dispatch($shouldAuthenticate::getName(), $shouldAuthenticate);
-            if ($shouldAuthenticate->mustAuthenticate()) {
+            $authenticate = true;
+            if ($this->dispatcher->hasListeners(U2fAuthenticationRequiredEvent::getName())) {
+                $shouldAuthenticate = new U2fAuthenticationRequiredEvent($user);
+                $this->dispatcher->dispatch($shouldAuthenticate::getName(), $shouldAuthenticate);
+                $authenticate = $shouldAuthenticate->mustAuthenticate();
+            }
+            if ($authenticate) {
                 $event->getRequest()->getSession()->set(static::U2F_SECURITY_KEY, true);
             }
         }
@@ -52,32 +56,32 @@ class U2fSubscriber implements EventSubscriberInterface
         if (
             $event->isMasterRequest() &&
             $event->getRequest()->getSession()->get(static::U2F_SECURITY_KEY)
-        ) {
-            $route = $event->getRequest()->get('_route');
-            $whitelist = array_merge(
-                [
-                    $this->redirectToRoute
-                ],
-                $this->whitelistOfRoutes,
-                [
-                    '_wdt',
-                    '_profiler_home',
-                    '_profiler_search',
-                    '_profiler_search_bar',
-                    '_profiler_phpinfo',
-                    '_profiler_search_results',
-                    '_profiler_open_file',
-                    '_profiler',
-                    '_profiler_router',
-                    '_profiler_exception',
-                    '_profiler_exception_css'
-                ]
-            );
+            ) {
+                $route = $event->getRequest()->get('_route');
+                $whitelist = array_merge(
+                    [
+                        $this->redirectToRoute
+                    ],
+                    $this->whitelistOfRoutes,
+                    [
+                        '_wdt',
+                        '_profiler_home',
+                        '_profiler_search',
+                        '_profiler_search_bar',
+                        '_profiler_phpinfo',
+                        '_profiler_search_results',
+                        '_profiler_open_file',
+                        '_profiler',
+                        '_profiler_router',
+                        '_profiler_exception',
+                        '_profiler_exception_css'
+                    ]
+                    );
 
-            if (!in_array($route, $whitelist)) {
-                $event->setResponse(new RedirectResponse($this->router->generate($this->redirectToRoute)));
+                if (!in_array($route, $whitelist)) {
+                    $event->setResponse(new RedirectResponse($this->router->generate($this->redirectToRoute)));
+                }
             }
-        }
     }
 
     public static function getSubscribedEvents()
