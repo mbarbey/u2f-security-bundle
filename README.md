@@ -1,3 +1,5 @@
+[![SymfonyInsight](https://insight.symfony.com/projects/ac7d49ec-b2aa-452d-817e-c036c7cb8b9f/big.png)](https://insight.symfony.com/projects/ac7d49ec-b2aa-452d-817e-c036c7cb8b9f)
+
 U2F Security Bundle
 ===================
 
