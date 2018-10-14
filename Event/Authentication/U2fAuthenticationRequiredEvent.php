@@ -56,7 +56,7 @@ class U2fAuthenticationRequiredEvent extends Event
      *
      * @return U2fUserInterface
      */
-    public function getUser()
+    public function getUser(): U2fUserInterface
     {
         return $this->user;
     }

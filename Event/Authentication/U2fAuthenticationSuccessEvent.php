@@ -55,7 +55,7 @@ class U2fAuthenticationSuccessEvent extends Event
      *
      * @return U2fUserInterface
      */
-    public function getUser()
+    public function getUser(): U2fUserInterface
     {
         return $this->user;
     }
@@ -65,7 +65,7 @@ class U2fAuthenticationSuccessEvent extends Event
      *
      * @return U2fKeyInterface
      */
-    public function getKey()
+    public function getKey(): U2fKeyInterface
     {
         return $this->key;
     }
