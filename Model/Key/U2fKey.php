@@ -1,9 +1,25 @@
 <?php
 
+/*
+ * This file is part of the U2F Security bundle.
+ *
+ * (c) Michael Barbey <michael@barbey-family.ch>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Mbarbey\U2fSecurityBundle\Model\Key;
 
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * U2F key entity base
+ *
+ * When you create your entity for the security keys, you can either extends this class or implement the U2fKeyInterface.
+ *
+ * @author Michael Barbey <michael@barbey-family.ch>
+ */
 abstract class U2fKey implements U2fKeyInterface
 {
     /**

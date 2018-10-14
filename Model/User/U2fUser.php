@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the U2F Security bundle.
+ *
+ * (c) Michael Barbey <michael@barbey-family.ch>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Mbarbey\U2fSecurityBundle\Model\User;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -7,6 +16,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Mbarbey\U2fSecurityBundle\Model\Key\U2fKeyInterface;
 
+/**
+ * U2F user entity base
+ *
+ * When you edit your own user entity, you can either extends this class or implement the U2fUserInterface.
+ *
+ * @author Michael Barbey <michael@barbey-family.ch>
+ */
 class U2fUser implements U2fUserInterface
 {
     /**

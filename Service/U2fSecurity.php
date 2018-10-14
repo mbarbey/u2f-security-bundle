@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the U2F Security bundle.
+ *
+ * (c) Michael Barbey <michael@barbey-family.ch>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Mbarbey\U2fSecurityBundle\Service;
 
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -20,20 +29,47 @@ use Mbarbey\U2fSecurityBundle\Event\Authentication\U2fPostAuthenticationEvent;
 use Mbarbey\U2fSecurityBundle\Model\Key\U2fKeyInterface;
 use Mbarbey\U2fSecurityBundle\EventSubscriber\U2fSubscriber;
 
+/**
+ * U2F security engine
+ *
+ * This class allow to manage U2F exchanges by using the following structure :
+ * - Create a registration request
+ * - Validate a registration response
+ * - Create an authentication request
+ * - Validate an authentication response
+ *
+ * @author Michael Barbey <michael@barbey-family.ch>
+ */
 class U2fSecurity
 {
     private $session;
     private $dispatcher;
 
+    /**
+     * @param SessionInterface $session                 The session manager
+     * @param EventDispatcherInterface $dispatcher      The event dispatcher
+     */
     public function __construct(SessionInterface $session, EventDispatcherInterface $dispatcher)
     {
         $this->session = $session;
         $this->dispatcher = $dispatcher;
     }
 
-    public function canRegister(U2fUserInterface $user, $appId = null)
+    /**
+     * If you want to add an extra layer of personalization to your system, you can call this function from your controller.
+     * This function will send a U2fPreRegistrationEvent and check if any event listener want to cancel the current
+     * registration process.
+     *
+     * It will return the dispatched event, so you can check if you should abort the registration or not.
+     *
+     * @param U2fUserInterface $user    The user which want to register a security key
+     * @param string $appId             The appId (must be the HTTP protocol and your domain name (ex: https://example.com)
+     * @return U2fPreRegistrationEvent  The event dispathed and updated by event listeners
+     */
+    public function canRegister(U2fUserInterface $user, string $appId = null): U2fPreRegistrationEvent
     {
         $event = new U2fPreRegistrationEvent($appId, $user);
+
         if ($this->dispatcher->hasListeners($event->getName())) {
             $this->dispatcher->dispatch($event::getName(), $event);
         }
@@ -41,30 +77,52 @@ class U2fSecurity
         return $event;
     }
 
-    public function createRegistration($appId)
+    /**
+     * Create a registration request array which will be used to communicate with the U2F security key.
+     *
+     * @param string $appId     The appId (must be the HTTP protocol and your domain name (ex: https://example.com)
+     * @return array            The array containing all the data required for the authentication
+     */
+    public function createRegistration(string $appId): array
     {
         $registrationData = U2FServer::makeRegistration($appId);
         $this->session->set('registrationRequest', $registrationData['request']);
 
-        $jsRequest = $registrationData['request'];
-        $jsSignatures = json_encode($registrationData['signatures']);
-
-        return ['request' => $jsRequest, 'signatures' => $jsSignatures];
+        return ['request' => $registrationData['request'], 'signatures' => json_encode($registrationData['signatures'])];
     }
 
-    public function validateRegistration(U2fUserInterface $user, U2fRegistrationInterface $registration, U2fKeyInterface $key)
+    /**
+     * Validate the given U2F registration response and fill the given key with the correct data.
+     *
+     * @param U2fUserInterface $user                    The user which want to register a security key
+     * @param U2fRegistrationInterface $registration    The registration response
+     * @param U2fKeyInterface $key                      The security key to fill with valid data
+     *
+     * @throws \Exception                               If there is an error, an exception is thrown to explain what went wrong
+     */
+    public function validateRegistration(U2fUserInterface $user, U2fRegistrationInterface $registration, U2fKeyInterface $key): void
     {
         $u2fRequest = $this->session->get('registrationRequest');
         $u2fResponse = (object)json_decode($registration->getResponse(), true);
 
         try {
+            /*
+             * Check if the response is correct
+             */
             $validatedRegistration = U2FServer::register($u2fRequest, $u2fResponse);
+
+            /*
+             * Check if the key hasn't already been registered
+             */
             foreach ($user->getU2fKeys() as $existingKey) {
                 if ($existingKey->getCertificate() == $validatedRegistration->getCertificate()) {
                     throw new U2FException('Key already registered', 4);
                 }
             }
         } catch (\Exception $e) {
+            /*
+             * In case of error, dispatch a failure-registration event and a post-registration event
+             */
             if ($this->dispatcher->hasListeners(U2fRegistrationFailureEvent::getName())) {
                 $this->dispatcher->dispatch(U2fRegistrationFailureEvent::getName(), new U2fRegistrationFailureEvent($user, $e));
             }
@@ -74,6 +132,10 @@ class U2fSecurity
             throw $e;
         }
 
+        /*
+         * If everything went good, we fill the given key with correct data and dispatch both a success-registration event
+         * and a post-registration event
+         */
         $key->setCertificate($validatedRegistration->getCertificate());
         $key->setCounter($validatedRegistration->getCounter());
         $key->setKeyHandle($validatedRegistration->getKeyHandle());
