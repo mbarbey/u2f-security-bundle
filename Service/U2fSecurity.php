@@ -18,6 +18,7 @@ use Mbarbey\U2fSecurityBundle\Event\Authentication\U2fPreAuthenticationEvent;
 use Mbarbey\U2fSecurityBundle\Event\Authentication\U2fAuthenticationFailureEvent;
 use Mbarbey\U2fSecurityBundle\Event\Authentication\U2fPostAuthenticationEvent;
 use Mbarbey\U2fSecurityBundle\Model\Key\U2fKeyInterface;
+use Mbarbey\U2fSecurityBundle\EventSubscriber\U2fSubscriber;
 
 class U2fSecurity
 {
@@ -152,6 +153,10 @@ class U2fSecurity
 
     public function stopRequestingAuthentication()
     {
+        if ($this->session->has(U2fSubscriber::U2F_SECURITY_KEY)) {
+            $this->session->remove(U2fSubscriber::U2F_SECURITY_KEY);
+        }
+
         $this->session->remove('authenticationRequest');
 
         if ($this->session->has('u2f_registration_error_counter')) {
