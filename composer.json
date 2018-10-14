@@ -16,12 +16,10 @@
 		"samyoul/u2f-php-server": "^1.1"
 	},
 	"require-dev" : {
-		"symfony/dependency-injection" : "~3.4|~4.0",
 		"symfony/event-dispatcher": "~3.4|~4.0",
 		"symfony/http-foundation" : "~3.4|~4.0",
 		"symfony/http-kernel" : "~3.4|~4.0",
 		"symfony/routing" : "~3.4|~4.0",
-		"symfony/yaml" : "~3.4|~4.0",
 		"symfony/security" : "~3.4|~4.0"
 	},
 	"autoload" : {

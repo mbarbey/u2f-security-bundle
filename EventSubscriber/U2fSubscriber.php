@@ -18,12 +18,18 @@ class U2fSubscriber implements EventSubscriberInterface
 {
     const U2F_SECURITY_KEY = 'u2f_must_validate';
 
+    private $redirectToRoute;
+    private $whitelistOfRoutes;
+
     private $router;
     private $session;
     private $dispatcher;
 
-    public function __construct(RouterInterface $router, SessionInterface $session, EventDispatcherInterface $dispatcher)
+    public function __construct($redirectToRoute, array $whitelistOfRoutes, RouterInterface $router, SessionInterface $session, EventDispatcherInterface $dispatcher)
     {
+        $this->redirectToRoute = $redirectToRoute;
+        $this->whitelistOfRoutes = $whitelistOfRoutes;
+
         $this->router = $router;
         $this->session = $session;
         $this->dispatcher = $dispatcher;
@@ -48,25 +54,28 @@ class U2fSubscriber implements EventSubscriberInterface
             $event->getRequest()->getSession()->get(static::U2F_SECURITY_KEY)
         ) {
             $route = $event->getRequest()->get('_route');
-            $whitelist = [
-                'user_authenticate_u2f',
-                'login',
-                'logout',
-                '_wdt',
-                '_profiler_home',
-                '_profiler_search',
-                '_profiler_search_bar',
-                '_profiler_phpinfo',
-                '_profiler_search_results',
-                '_profiler_open_file',
-                '_profiler',
-                '_profiler_router',
-                '_profiler_exception',
-                '_profiler_exception_css'
-            ];
+            $whitelist = array_merge(
+                [
+                    $this->redirectToRoute
+                ],
+                $this->whitelistOfRoutes,
+                [
+                    '_wdt',
+                    '_profiler_home',
+                    '_profiler_search',
+                    '_profiler_search_bar',
+                    '_profiler_phpinfo',
+                    '_profiler_search_results',
+                    '_profiler_open_file',
+                    '_profiler',
+                    '_profiler_router',
+                    '_profiler_exception',
+                    '_profiler_exception_css'
+                ]
+            );
 
             if (!in_array($route, $whitelist)) {
-                $event->setResponse(new RedirectResponse($this->router->generate('user_authenticate_u2f')));
+                $event->setResponse(new RedirectResponse($this->router->generate($this->redirectToRoute)));
             }
         }
     }

@@ -13,15 +13,21 @@ class U2fPostAuthenticationEvent extends Event
 
     protected $key;
 
+    protected $success = false;
+
     public static function getName()
     {
         return U2fEvents::U2F_POST_AUTHENTICATION;
     }
 
-    public function __construct(U2fUserInterface $user, U2fKeyInterface $key)
+    public function __construct(U2fUserInterface $user, U2fKeyInterface $key = null)
     {
-        $this->setUser($user);
-        $this->setKey($key);
+        $this->user = $user;
+
+        if ($key) {
+            $this->key = $key;
+            $this->success = true;
+        }
     }
 
     public function getUser()
@@ -29,22 +35,13 @@ class U2fPostAuthenticationEvent extends Event
         return $this->user;
     }
 
-    public function setUser(U2fUserInterface $user)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     public function getKey()
     {
         return $this->key;
     }
 
-    public function setKey(U2fKeyInterface $key)
+    public function isSuccess()
     {
-        $this->key = $key;
-
-        return $this;
+        return $this->success;
     }
 }

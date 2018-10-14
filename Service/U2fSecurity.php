@@ -63,6 +63,7 @@ class U2fSecurity
             }
         } catch (\Exception $e) {
             $this->dispatcher->dispatch(U2fRegistrationFailureEvent::getName(), new U2fRegistrationFailureEvent($user, $e));
+            $this->dispatcher->dispatch(U2fPostRegistrationEvent::getName(), new U2fPostRegistrationEvent($user));
             throw $e;
         }
 
@@ -115,6 +116,7 @@ class U2fSecurity
             $counter = $this->session->get('u2f_registration_error_counter', 0) +1;
             $error = new U2fAuthenticationFailureEvent($user, $e->getMessage(), $counter);
             $this->dispatcher->dispatch($error->getName(), $error);
+            $this->dispatcher->dispatch(U2fPostAuthenticationEvent::getName(), new U2fPostAuthenticationEvent($user));
 
             throw $e;
         }

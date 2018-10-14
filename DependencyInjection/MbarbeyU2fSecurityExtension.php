@@ -15,5 +15,12 @@ class MbarbeyU2fSecurityExtension extends Extension
             new FileLocator(__DIR__.'/../Resources/config')
             );
         $loader->load('services.xml');
+
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $definition = $container->getDefinition('mbarbey_u2f_security.subscriber');
+        $definition->replaceArgument(0, $config['authentication_route']);
+        $definition->replaceArgument(1, $config['whitelist_routes']);
     }
 }
