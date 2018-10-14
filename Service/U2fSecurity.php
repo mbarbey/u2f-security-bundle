@@ -123,14 +123,19 @@ class U2fSecurity
 
         $this->dispatcher->dispatch(U2fAuthenticationSuccessEvent::getName(), new U2fAuthenticationSuccessEvent($user, $updatedKey));
 
+        $this->stopRequestingAuthentication();
+
+        $this->dispatcher->dispatch(U2fPostAuthenticationEvent::getName(), new U2fPostAuthenticationEvent($user, $updatedKey));
+
+        return $updatedKey;
+    }
+
+    public function stopRequestingAuthentication()
+    {
         $this->session->remove('authenticationRequest');
 
         if ($this->session->has('u2f_registration_error_counter')) {
             $this->session->remove('u2f_registration_error_counter');
         }
-
-        $this->dispatcher->dispatch(U2fPostAuthenticationEvent::getName(), new U2fPostAuthenticationEvent($user, $updatedKey));
-
-        return $updatedKey;
     }
 }

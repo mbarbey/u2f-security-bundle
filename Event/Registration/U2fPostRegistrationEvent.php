@@ -13,7 +13,7 @@ class U2fPostRegistrationEvent extends Event
 
     protected $key;
 
-    protected $success = false;
+    private $success = false;
 
     public static function getName()
     {
@@ -23,7 +23,6 @@ class U2fPostRegistrationEvent extends Event
     public function __construct(U2fUserInterface $user, U2fKeyInterface $key = null)
     {
         $this->user = $user;
-
         if ($key) {
             $this->key = $key;
             $this->success = true;
@@ -35,12 +34,26 @@ class U2fPostRegistrationEvent extends Event
         return $this->user;
     }
 
+    public function setUser(U2fUserInterface $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
     public function getKey()
     {
         return $this->key;
     }
 
-    public function isSuccess()
+    public function setKey(U2fKeyInterface $key)
+    {
+        $this->key = $key;
+
+        return $this;
+    }
+
+    public function isSuccess(): bool
     {
         return $this->success;
     }
