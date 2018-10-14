@@ -98,8 +98,8 @@ Next you will have to create an empty registration model which will extends the 
 Bravo, you have made 80% of the work. Now let's do some easier tasks.
 
 
-Controllers
------------
+Registration controller
+-----------------------
 
 We will first allow users to register security keys.
 
@@ -191,6 +191,9 @@ Here is the JS you must use. Feel free to edit it as you want.
 And tadaaaa ! You users can register their security keys and link it to their account !
 
 But ! Registering keys is cool, but it will be better to be authenticated with it.
+
+Authentication controller
+-------------------------
 
 Now let's to the same thing for the authentication. Keep in mind that this action must match with your authentication route you defined in the configuration of the bundle.
 
