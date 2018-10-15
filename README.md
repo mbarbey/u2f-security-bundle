@@ -4,6 +4,8 @@ U2F Security Bundle
 This Symfony bundle aim to add a two factor security level to your Symfony project.
 
 [![Build Status](https://travis-ci.org/mbarbey/u2f-security-bundle.svg?branch=master)](https://travis-ci.org/mbarbey/u2f-security-bundle)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mbarbey/u2f-security-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mbarbey/u2f-security-bundle/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/mbarbey/u2f-security-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/mbarbey/u2f-security-bundle/?branch=master)
 
 Overview
 --------
