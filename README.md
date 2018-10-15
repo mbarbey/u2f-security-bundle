@@ -1,9 +1,9 @@
-[![SymfonyInsight](https://insight.symfony.com/projects/ac7d49ec-b2aa-452d-817e-c036c7cb8b9f/big.png)](https://insight.symfony.com/projects/ac7d49ec-b2aa-452d-817e-c036c7cb8b9f)
-
 U2F Security Bundle
 ===================
 
 This Symfony bundle aim to add a two factor security level to your Symfony project.
+
+[![Build Status](https://travis-ci.org/mbarbey/u2f-security-bundle.svg?branch=master)](https://travis-ci.org/mbarbey/u2f-security-bundle)
 
 Overview
 --------
