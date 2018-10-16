@@ -29,13 +29,15 @@ class U2fAuthenticationRequiredEventTest extends TestCase
 
     public function testName()
     {
-        $this->assertEquals('u2f.authentication.required', U2fAuthenticationRequiredEvent::getName());
-        $this->assertEquals('u2f.authentication.required', $this->event->getName());
+        $name = 'u2f.authentication.required';
+
+        $this->assertEquals(U2fAuthenticationRequiredEvent::getName(), $name);
+        $this->assertEquals($this->event->getName(), $name);
     }
 
     public function testUser()
     {
-        $this->assertEquals($this->user, $this->event->getUser());
+        $this->assertEquals($this->event->getUser(), $this->user);
     }
 
     public function testMustAuthenticate()

@@ -32,17 +32,19 @@ class U2fAuthenticationSuccessEventTest extends TestCase
 
     public function testName()
     {
-        $this->assertEquals('u2f.authentication.success', U2fAuthenticationSuccessEvent::getName());
-        $this->assertEquals('u2f.authentication.success', $this->event->getName());
+        $name = 'u2f.authentication.success';
+
+        $this->assertEquals(U2fAuthenticationSuccessEvent::getName(), $name);
+        $this->assertEquals($this->event->getName(), $name);
     }
 
     public function testUser()
     {
-        $this->assertEquals($this->user, $this->event->getUser());
+        $this->assertEquals($this->event->getUser(), $this->user);
     }
 
     public function testKey()
     {
-        $this->assertEquals($this->key, $this->event->getKey());
+        $this->assertEquals($this->event->getKey(), $this->key);
     }
 }

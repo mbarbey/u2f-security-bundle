@@ -20,33 +20,37 @@ class U2fAuthenticationFailureEventTest extends TestCase
     private $event;
     private $user;
     private $error;
+    private $counter;
 
     public function setUp()
     {
         $this->user = $this->getMockForAbstractClass(U2fUser::class);
         $this->error = new \Exception();
+        $this->counter = rand(10, 100);
 
-        $this->event = new U2fAuthenticationFailureEvent($this->user, $this->error, 33);
+        $this->event = new U2fAuthenticationFailureEvent($this->user, $this->error, $this->counter);
     }
 
     public function testName()
     {
-        $this->assertEquals('u2f.authentication.failure', U2fAuthenticationFailureEvent::getName());
-        $this->assertEquals('u2f.authentication.failure', $this->event->getName());
+        $name = 'u2f.authentication.failure';
+
+        $this->assertEquals(U2fAuthenticationFailureEvent::getName(), $name);
+        $this->assertEquals($this->event->getName(), $name);
     }
 
     public function testUser()
     {
-        $this->assertEquals($this->user, $this->event->getUser());
+        $this->assertEquals($this->event->getUser(), $this->user);
     }
 
     public function testError()
     {
-        $this->assertEquals($this->error, $this->event->getError());
+        $this->assertEquals($this->event->getError(), $this->error);
     }
 
     public function testFailureCounter()
     {
-        $this->assertEquals(33, $this->event->getFailureCounter());
+        $this->assertEquals($this->event->getFailureCounter(), $this->counter);
     }
 }
