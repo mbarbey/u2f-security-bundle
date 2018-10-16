@@ -187,7 +187,7 @@ class U2fSecurity
                 $this->session->get('authenticationRequest'),
                 $user->getU2fKeys()->toArray(),
                 json_decode($authentication->getResponse())
-                );
+            );
         } catch (\Exception $e) {
             if ($this->dispatcher->hasListeners(U2fAuthenticationFailureEvent::getName())) {
                 $counter = $this->session->get('u2f_registration_error_counter', 0) +1;
