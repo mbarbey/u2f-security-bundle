@@ -12,6 +12,7 @@
 namespace Mbarbey\U2fSecurityBundle\Model\Key;
 
 use Doctrine\ORM\Mapping as ORM;
+use Mbarbey\U2fSecurityBundle\Model\User\U2fUserInterface;
 
 /**
  * U2F key entity base
@@ -41,6 +42,12 @@ abstract class U2fKey implements U2fKeyInterface
      * @ORM\Column(type="integer")
      */
     public $counter;
+
+    /**
+     * Override the definition of this variable to create the relationship
+     * @var U2fUserInterface
+     */
+    protected $user;
 
     /**
      * @return string|NULL
@@ -114,6 +121,44 @@ abstract class U2fKey implements U2fKeyInterface
     public function setCounter(int $counter): self
     {
         $this->counter = $counter;
+
+        return $this;
+    }
+
+    /**
+     * @return string|NULL
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return self
+     */
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return U2fUserInterface|NULL
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param U2fUserInterface $user
+     * @return self
+     */
+    public function setUser(?U2fUserInterface $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

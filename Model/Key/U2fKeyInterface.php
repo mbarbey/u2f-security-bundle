@@ -11,6 +11,8 @@
 
 namespace Mbarbey\U2fSecurityBundle\Model\Key;
 
+use Mbarbey\U2fSecurityBundle\Model\User\U2fUserInterface;
+
 /**
  * U2F key entity interface
  *
@@ -63,4 +65,14 @@ interface U2fKeyInterface
      * @return self
      */
     public function setCounter(int $counter);
+
+    /**
+     * @return U2fUserInterface|NULL
+     */
+    public function getUser();
+
+    /**
+     * @param U2fUserInterface $user
+     */
+    public function setUser(?U2fUserInterface $user);
 }

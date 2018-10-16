@@ -66,7 +66,7 @@ class U2fSecurity
      * @param string $appId             The appId (must be the HTTP protocol and your domain name (ex: https://example.com)
      * @return U2fPreRegistrationEvent  The event dispathed and updated by event listeners
      */
-    public function canRegister(U2fUserInterface $user, string $appId = null): U2fPreRegistrationEvent
+    public function canRegister(U2fUserInterface $user, string $appId): U2fPreRegistrationEvent
     {
         $event = new U2fPreRegistrationEvent($appId, $user);
 
@@ -137,7 +137,7 @@ class U2fSecurity
          * and a post-registration event
          */
         $key->setCertificate($validatedRegistration->getCertificate());
-        $key->setCounter($validatedRegistration->getCounter());
+        $key->setCounter((int)$validatedRegistration->getCounter());
         $key->setKeyHandle($validatedRegistration->getKeyHandle());
         $key->setPublicKey($validatedRegistration->getPublicKey());
 

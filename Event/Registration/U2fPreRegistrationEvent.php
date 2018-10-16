@@ -86,8 +86,6 @@ class U2fPreRegistrationEvent extends Event
         $this->reason = $reason;
         $this->abort = true;
         $this->stopPropagation();
-
-        return $this;
     }
 
     /**
