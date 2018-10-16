@@ -22,7 +22,7 @@ class U2fAuthenticationRequiredEventTest extends TestCase
 
     public function setUp()
     {
-        $this->user = new U2fUser();
+        $this->user = $this->getMockForAbstractClass(U2fUser::class);
 
         $this->event = new U2fAuthenticationRequiredEvent($this->user);
     }

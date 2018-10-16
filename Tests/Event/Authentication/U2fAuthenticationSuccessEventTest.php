@@ -14,7 +14,7 @@ namespace Mbarbey\U2fSecurityBundle\Tests\Event\Authentication;
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 use Mbarbey\U2fSecurityBundle\Model\User\U2fUser;
 use Mbarbey\U2fSecurityBundle\Event\Authentication\U2fAuthenticationSuccessEvent;
-use Mbarbey\U2fSecurityBundle\Tests\Entity\Key\U2fKeyTest;
+use Mbarbey\U2fSecurityBundle\Model\Key\U2fKey;
 
 class U2fAuthenticationSuccessEventTest extends TestCase
 {
@@ -24,8 +24,8 @@ class U2fAuthenticationSuccessEventTest extends TestCase
 
     public function setUp()
     {
-        $this->user = new U2fUser();
-        $this->key = new U2fKeyTest();
+        $this->user = $this->getMockForAbstractClass(U2fUser::class);
+        $this->key = $this->getMockForAbstractClass(U2fKey::class);
 
         $this->event = new U2fAuthenticationSuccessEvent($this->user, $this->key);
     }

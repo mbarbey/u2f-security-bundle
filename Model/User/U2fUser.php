@@ -23,7 +23,7 @@ use Mbarbey\U2fSecurityBundle\Model\Key\U2fKeyInterface;
  *
  * @author Michael Barbey <michael@barbey-family.ch>
  */
-class U2fUser implements U2fUserInterface
+abstract class U2fUser implements U2fUserInterface
 {
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Key", mappedBy="user", orphanRemoval=true)

@@ -12,6 +12,7 @@
 namespace Mbarbey\U2fSecurityBundle\Tests\Entity\Key;
 
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
+use Mbarbey\U2fSecurityBundle\Model\Key\U2fKey;
 
 class U2fKeyTest extends TestCase
 {
@@ -73,6 +74,6 @@ class U2fKeyTest extends TestCase
 
     protected function getKey()
     {
-        return $this->getMockForAbstractClass('Mbarbey\U2fSecurityBundle\Model\Key\U2fKey');
+        return $this->getMockForAbstractClass(U2fKey::class);
     }
 }

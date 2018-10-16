@@ -23,7 +23,7 @@ class U2fAuthenticationFailureEventTest extends TestCase
 
     public function setUp()
     {
-        $this->user = new U2fUser();
+        $this->user = $this->getMockForAbstractClass(U2fUser::class);
         $this->error = new \Exception();
 
         $this->event = new U2fAuthenticationFailureEvent($this->user, $this->error, 33);
