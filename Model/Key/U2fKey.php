@@ -126,25 +126,6 @@ abstract class U2fKey implements U2fKeyInterface
     }
 
     /**
-     * @return string|NULL
-     */
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     * @return self
-     */
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
      * @return U2fUserInterface|NULL
      */
     public function getUser()
