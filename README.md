@@ -1,3 +1,5 @@
+Work in progress. Bundle almost finished. Code is ready, now working on tests and readme.
+
 U2F Security Bundle
 ===================
 
@@ -49,7 +51,7 @@ Then you need to create the file `config/packages/mbarbey_u2f_security.yml` (bec
 
 ```yaml
 mbarbey_u2f_security:
-    authentication_route: user_authenticate_u2f
+    authentication_route: my_super_route_for_u2f_authentication
     whitelist_routes:
         - login
         - logout
