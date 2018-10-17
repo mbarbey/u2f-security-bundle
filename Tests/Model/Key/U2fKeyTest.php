@@ -13,6 +13,7 @@ namespace Mbarbey\U2fSecurityBundle\Tests\Entity\Key;
 
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 use Mbarbey\U2fSecurityBundle\Model\Key\U2fKey;
+use Mbarbey\U2fSecurityBundle\Model\User\U2fUser;
 
 class U2fKeyTest extends TestCase
 {
@@ -70,6 +71,16 @@ class U2fKeyTest extends TestCase
         $key->setCounter(200);
         $this->assertEquals($key->counter, 200);
         $this->assertEquals($key->getCounter(), 200);
+    }
+
+    public function testUser()
+    {
+        $key = $this->getKey();
+        $this->assertNull($key->getUser());
+
+        $user = $this->getMockForAbstractClass(U2fUser::class);
+        $key->setUser($user);
+        $this->assertEquals($key->getUser(), $user);
     }
 
     protected function getKey()
