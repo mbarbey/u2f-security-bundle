@@ -191,6 +191,7 @@ class U2fSecurity
         } catch (\Exception $e) {
             if ($this->dispatcher->hasListeners(U2fAuthenticationFailureEvent::getName())) {
                 $counter = $this->session->get('u2f_registration_error_counter', 0) +1;
+                $this->session->set('u2f_registration_error_counter', $counter);
                 $this->dispatcher->dispatch(U2fAuthenticationFailureEvent::getName(), new U2fAuthenticationFailureEvent($user, $e, $counter));
             }
             if ($this->dispatcher->hasListeners(U2fPostAuthenticationEvent::getName())) {
