@@ -142,6 +142,8 @@ class U2fSubscriber implements EventSubscriberInterface
              * If the user isn't on a whitelisted route, he is redirected to the authentication page.
              */
             if (!in_array($route, $whitelist)) {
+                $counter = $this->session->get('u2f_registration_error_counter', -1) +1;
+                $this->session->set('u2f_registration_error_counter', $counter);
                 $event->setResponse(new RedirectResponse($this->router->generate($this->redirectToRoute)));
                 $event->stopPropagation();
             }
