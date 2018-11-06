@@ -31,7 +31,7 @@ interface U2fKeyInterface
      * @param string $keyHandle
      * @return self
      */
-    public function setKeyHandle(string $keyHandle);
+    public function setKeyHandle($keyHandle);
 
     /**
      * @return string|NULL
@@ -42,7 +42,7 @@ interface U2fKeyInterface
      * @param string $publicKey
      * @return self
      */
-    public function setPublicKey(string $publicKey);
+    public function setPublicKey($publicKey);
 
     /**
      * @return string|NULL
@@ -53,7 +53,7 @@ interface U2fKeyInterface
      * @param string $certificate
      * @return self
      */
-    public function setCertificate(string $certificate);
+    public function setCertificate($certificate);
 
     /**
      * @return int|NULL
@@ -64,7 +64,7 @@ interface U2fKeyInterface
      * @param int $counter
      * @return self
      */
-    public function setCounter(int $counter);
+    public function setCounter($counter);
 
     /**
      * @return U2fUserInterface|NULL
@@ -74,5 +74,5 @@ interface U2fKeyInterface
     /**
      * @param U2fUserInterface $user
      */
-    public function setUser(?U2fUserInterface $user);
+    public function setUser(U2fUserInterface $user = null);
 }

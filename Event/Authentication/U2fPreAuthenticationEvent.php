@@ -47,7 +47,7 @@ class U2fPreAuthenticationEvent extends Event
      * @param string $appId             The appId for the authentication
      * @param U2fUserInterface $user    The user who will be requested to authenticate with a security key
      */
-    public function __construct(string $appId, U2fUserInterface $user)
+    public function __construct($appId, U2fUserInterface $user)
     {
         $this->appId = $appId;
         $this->user = $user;
@@ -81,7 +81,7 @@ class U2fPreAuthenticationEvent extends Event
      *
      * @param string $reason
      */
-    public function abort(string $reason = null)
+    public function abort($reason = null)
     {
         $this->reason = $reason;
         $this->abort = true;

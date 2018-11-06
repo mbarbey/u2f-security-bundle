@@ -39,7 +39,7 @@ class U2fRegistration implements U2fRegistrationInterface
     /**
      * @param string|null $response
      */
-    public function setResponse(string $response = null)
+    public function setResponse($response = null)
     {
         $this->response = $response;
 

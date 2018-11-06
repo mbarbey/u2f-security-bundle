@@ -47,7 +47,7 @@ class U2fPreRegistrationEvent extends Event
      * @param string $appId             The appId for the registration
      * @param U2fUserInterface $user    The user who will register a security key
      */
-    public function __construct(string $appId, U2fUserInterface $user)
+    public function __construct($appId, U2fUserInterface $user)
     {
         $this->appId = $appId;
         $this->user = $user;

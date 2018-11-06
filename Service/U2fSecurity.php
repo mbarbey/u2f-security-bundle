@@ -66,7 +66,7 @@ class U2fSecurity
      * @param string $appId             The appId (must be the HTTP protocol and your domain name (ex: https://example.com)
      * @return U2fPreRegistrationEvent  The event dispathed and updated by event listeners
      */
-    public function canRegister(U2fUserInterface $user, string $appId)
+    public function canRegister(U2fUserInterface $user, $appId)
     {
         $event = new U2fPreRegistrationEvent($appId, $user);
 
@@ -83,7 +83,7 @@ class U2fSecurity
      * @param string $appId     The appId (must be the HTTP protocol and your domain name (ex: https://example.com)
      * @return array            The array containing all the data required for the authentication
      */
-    public function createRegistration(string $appId)
+    public function createRegistration($appId)
     {
         $registrationData = U2FServer::makeRegistration($appId);
         $this->session->set('registrationRequest', $registrationData['request']);

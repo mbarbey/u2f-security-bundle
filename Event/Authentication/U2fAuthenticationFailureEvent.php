@@ -44,7 +44,7 @@ class U2fAuthenticationFailureEvent extends Event
      * @param \Exception $error         The exception which triggered the failure
      * @param int $failureCounter       The number of consecutive fails of this user
      */
-    public function __construct(U2fUserInterface $user, \Exception $error, int $failureCounter = 1)
+    public function __construct(U2fUserInterface $user, \Exception $error, $failureCounter = 1)
     {
         $this->user = $user;
         $this->error = $error;

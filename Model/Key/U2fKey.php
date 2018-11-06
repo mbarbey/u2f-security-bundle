@@ -61,7 +61,7 @@ abstract class U2fKey implements U2fKeyInterface
      * @param string $keyHandle
      * @return self
      */
-    public function setKeyHandle(string $keyHandle)
+    public function setKeyHandle($keyHandle)
     {
         $this->keyHandle = $keyHandle;
 
@@ -80,7 +80,7 @@ abstract class U2fKey implements U2fKeyInterface
      * @param string $publicKey
      * @return self
      */
-    public function setPublicKey(string $publicKey)
+    public function setPublicKey($publicKey)
     {
         $this->publicKey = $publicKey;
 
@@ -99,7 +99,7 @@ abstract class U2fKey implements U2fKeyInterface
      * @param string $certificate
      * @return self
      */
-    public function setCertificate(string $certificate)
+    public function setCertificate($certificate)
     {
         $this->certificate = $certificate;
 
@@ -118,7 +118,7 @@ abstract class U2fKey implements U2fKeyInterface
      * @param int $counter
      * @return self
      */
-    public function setCounter(int $counter)
+    public function setCounter($counter)
     {
         $this->counter = $counter;
 
@@ -137,7 +137,7 @@ abstract class U2fKey implements U2fKeyInterface
      * @param U2fUserInterface $user
      * @return self
      */
-    public function setUser(?U2fUserInterface $user)
+    public function setUser(U2fUserInterface $user = null)
     {
         $this->user = $user;
 

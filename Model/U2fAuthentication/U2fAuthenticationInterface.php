@@ -29,5 +29,5 @@ interface U2fAuthenticationInterface
     /**
      * @param string|null $response
      */
-    public function setResponse(string $response = null);
+    public function setResponse($response = null);
 }

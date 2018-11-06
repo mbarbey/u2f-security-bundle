@@ -90,12 +90,12 @@ EOF;
         return $parser->parse($yaml);
     }
 
-    private function assertHasDefinition(string $id)
+    private function assertHasDefinition($id)
     {
         $this->assertTrue($this->configuration->hasDefinition($id));
     }
 
-    private function getDefinitionArgument(string $id, int $index)
+    private function getDefinitionArgument($id, $index)
     {
         return $this->configuration->getDefinition($id)->getArgument($index);
     }

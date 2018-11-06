@@ -39,7 +39,7 @@ abstract class U2fAuthentication implements U2fAuthenticationInterface
     /**
      * @param string|null $response
      */
-    public function setResponse(string $response = null)
+    public function setResponse($response = null)
     {
         $this->response = $response;
 
