@@ -6,10 +6,25 @@ cache:
     - $HOME/symfony-bridge/.phpunit
 
 php:
+  - 5.5
+  - 5.6
   - 7.1
   - 7.2
+  - 7.3
 
 sudo: false
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 7.0
+      env: TARGET=cs_dry_run
+    - php: 5.5
+      env: COMPOSER_FLAGS="--prefer-lowest"
+    - php: 5.6
+      env: DEPENDENCIES="symfony/lts:^2"
+    - php: 7.1
+      env: DEPENDENCIES="symfony/lts:^3"
 
 cache:
   directories:
