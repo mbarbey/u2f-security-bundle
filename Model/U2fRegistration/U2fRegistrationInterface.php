@@ -24,7 +24,7 @@ interface U2fRegistrationInterface
     /**
      * @return string|null
      */
-    public function getResponse(): ?string;
+    public function getResponse();
 
     /**
      * @param string|null $response

@@ -31,7 +31,7 @@ class U2fRegistration implements U2fRegistrationInterface
     /**
      * @return string|null
      */
-    public function getResponse(): ?string
+    public function getResponse()
     {
         return $this->response;
     }

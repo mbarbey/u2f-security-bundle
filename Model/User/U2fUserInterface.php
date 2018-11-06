@@ -26,7 +26,7 @@ interface U2fUserInterface
     /**
      * @return Collection|U2fKeyInterface[]
      */
-    public function getU2fKeys(): Collection;
+    public function getU2fKeys();
 
     /**
      * @param U2fKeyInterface $u2fKey

@@ -38,7 +38,7 @@ class U2fPreRegistrationEvent extends Event
      *
      * @return string
      */
-    public static function getName(): string
+    public static function getName()
     {
         return 'u2f.registration.before';
     }
@@ -58,7 +58,7 @@ class U2fPreRegistrationEvent extends Event
      *
      * @return U2fUserInterface
      */
-    public function getUser(): U2fUserInterface
+    public function getUser()
     {
         return $this->user;
     }
@@ -69,7 +69,7 @@ class U2fPreRegistrationEvent extends Event
      *
      * @return string
      */
-    public function getAppId(): string
+    public function getAppId()
     {
         return $this->appId;
     }
@@ -81,7 +81,7 @@ class U2fPreRegistrationEvent extends Event
      *
      * @param string $reason
      */
-    public function abort($reason = null): void
+    public function abort($reason = null)
     {
         $this->reason = $reason;
         $this->abort = true;
@@ -93,7 +93,7 @@ class U2fPreRegistrationEvent extends Event
      *
      * @return bool
      */
-    public function isAborted(): bool
+    public function isAborted()
     {
         return $this->abort;
     }
@@ -103,7 +103,7 @@ class U2fPreRegistrationEvent extends Event
      *
      * @return string|NULL
      */
-    public function getReason(): ?string
+    public function getReason()
     {
         return $this->reason;
     }

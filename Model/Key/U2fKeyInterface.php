@@ -25,7 +25,7 @@ interface U2fKeyInterface
     /**
      * @return string|NULL
      */
-    public function getKeyHandle(): ?string;
+    public function getKeyHandle();
 
     /**
      * @param string $keyHandle
@@ -36,7 +36,7 @@ interface U2fKeyInterface
     /**
      * @return string|NULL
      */
-    public function getPublicKey(): ?string;
+    public function getPublicKey();
 
     /**
      * @param string $publicKey
@@ -47,7 +47,7 @@ interface U2fKeyInterface
     /**
      * @return string|NULL
      */
-    public function getCertificate(): ?string;
+    public function getCertificate();
 
     /**
      * @param string $certificate
@@ -58,7 +58,7 @@ interface U2fKeyInterface
     /**
      * @return int|NULL
      */
-    public function getCounter(): ?int;
+    public function getCounter();
 
     /**
      * @param int $counter

@@ -31,7 +31,7 @@ abstract class U2fAuthentication implements U2fAuthenticationInterface
     /**
      * @return string|null
      */
-    public function getResponse(): ?string
+    public function getResponse()
     {
         return $this->response;
     }

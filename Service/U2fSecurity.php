@@ -66,7 +66,7 @@ class U2fSecurity
      * @param string $appId             The appId (must be the HTTP protocol and your domain name (ex: https://example.com)
      * @return U2fPreRegistrationEvent  The event dispathed and updated by event listeners
      */
-    public function canRegister(U2fUserInterface $user, string $appId): U2fPreRegistrationEvent
+    public function canRegister(U2fUserInterface $user, string $appId)
     {
         $event = new U2fPreRegistrationEvent($appId, $user);
 
@@ -83,7 +83,7 @@ class U2fSecurity
      * @param string $appId     The appId (must be the HTTP protocol and your domain name (ex: https://example.com)
      * @return array            The array containing all the data required for the authentication
      */
-    public function createRegistration(string $appId): array
+    public function createRegistration(string $appId)
     {
         $registrationData = U2FServer::makeRegistration($appId);
         $this->session->set('registrationRequest', $registrationData['request']);
@@ -100,7 +100,7 @@ class U2fSecurity
      *
      * @throws \Exception                               If there is an error, an exception is thrown to explain what went wrong
      */
-    public function validateRegistration(U2fUserInterface $user, U2fRegistrationInterface $registration, U2fKeyInterface $key): void
+    public function validateRegistration(U2fUserInterface $user, U2fRegistrationInterface $registration, U2fKeyInterface $key)
     {
         $u2fRequest = $this->session->get('registrationRequest');
         $u2fResponse = (object)json_decode($registration->getResponse(), true);

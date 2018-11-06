@@ -33,7 +33,7 @@ class U2fRegistrationFailureEvent extends Event
      *
      * @return string
      */
-    public static function getName(): string
+    public static function getName()
     {
         return 'u2f.registration.failure';
     }
@@ -53,7 +53,7 @@ class U2fRegistrationFailureEvent extends Event
      *
      * @return U2fUserInterface
      */
-    public function getUser(): U2fUserInterface
+    public function getUser()
     {
         return $this->user;
     }
@@ -63,7 +63,7 @@ class U2fRegistrationFailureEvent extends Event
      *
      * @return \Exception
      */
-    public function getError(): \Exception
+    public function getError()
     {
         return $this->error;
     }

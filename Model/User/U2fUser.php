@@ -38,7 +38,7 @@ abstract class U2fUser implements U2fUserInterface
     /**
      * @return Collection|U2fKeyInterface[]
      */
-    public function getU2fKeys(): Collection
+    public function getU2fKeys()
     {
         return $this->u2fKeys;
     }
@@ -47,7 +47,7 @@ abstract class U2fUser implements U2fUserInterface
      * @param U2fKeyInterface $u2fKey
      * @return self
      */
-    public function addU2fKey(U2fKeyInterface $u2fKey): self
+    public function addU2fKey(U2fKeyInterface $u2fKey)
     {
         if (!$this->u2fKeys->contains($u2fKey)) {
             $this->u2fKeys[] = $u2fKey;
@@ -61,7 +61,7 @@ abstract class U2fUser implements U2fUserInterface
      * @param U2fKeyInterface $u2fKey
      * @return self
      */
-    public function removeU2fKey(U2fKeyInterface $u2fKey): self
+    public function removeU2fKey(U2fKeyInterface $u2fKey)
     {
         if ($this->u2fKeys->contains($u2fKey)) {
             $this->u2fKeys->removeElement($u2fKey);

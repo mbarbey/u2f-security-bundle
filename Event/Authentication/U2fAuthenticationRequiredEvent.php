@@ -37,7 +37,7 @@ class U2fAuthenticationRequiredEvent extends Event
      *
      * @return string
      */
-    public static function getName(): string
+    public static function getName()
     {
         return 'u2f.authentication.required';
     }
@@ -55,7 +55,7 @@ class U2fAuthenticationRequiredEvent extends Event
      *
      * @return U2fUserInterface
      */
-    public function getUser(): U2fUserInterface
+    public function getUser()
     {
         return $this->user;
     }
@@ -66,7 +66,7 @@ class U2fAuthenticationRequiredEvent extends Event
      *
      * Calling this function stop the propagation of the event.
      */
-    public function abort(): void
+    public function abort()
     {
         $this->mustAuthenticate = false;
         $this->stopPropagation();
@@ -77,7 +77,7 @@ class U2fAuthenticationRequiredEvent extends Event
      *
      * @return bool
      */
-    public function mustAuthenticate(): bool
+    public function mustAuthenticate()
     {
         return $this->mustAuthenticate;
     }

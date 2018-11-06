@@ -34,7 +34,7 @@ class U2fAuthenticationFailureEvent extends Event
      *
      * @return string
      */
-    public static function getName(): string
+    public static function getName()
     {
         return 'u2f.authentication.failure';
     }
@@ -56,7 +56,7 @@ class U2fAuthenticationFailureEvent extends Event
      *
      * @return U2fUserInterface
      */
-    public function getUser(): U2fUserInterface
+    public function getUser()
     {
         return $this->user;
     }
@@ -66,7 +66,7 @@ class U2fAuthenticationFailureEvent extends Event
      *
      * @return \Exception
      */
-    public function getError(): \Exception
+    public function getError()
     {
         return $this->error;
     }
@@ -76,7 +76,7 @@ class U2fAuthenticationFailureEvent extends Event
      *
      * @return int
      */
-    public function getFailureCounter(): int
+    public function getFailureCounter()
     {
         return $this->failureCounter;
     }

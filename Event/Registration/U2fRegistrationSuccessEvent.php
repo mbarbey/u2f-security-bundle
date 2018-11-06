@@ -34,7 +34,7 @@ class U2fRegistrationSuccessEvent extends Event
      *
      * @return string
      */
-    public static function getName(): string
+    public static function getName()
     {
         return 'u2f.registration.success';
     }
@@ -54,7 +54,7 @@ class U2fRegistrationSuccessEvent extends Event
      *
      * @return U2fUserInterface
      */
-    public function getUser(): U2fUserInterface
+    public function getUser()
     {
         return $this->user;
     }
@@ -64,7 +64,7 @@ class U2fRegistrationSuccessEvent extends Event
      *
      * @return U2fKeyInterface
      */
-    public function getKey(): U2fKeyInterface
+    public function getKey()
     {
         return $this->key;
     }

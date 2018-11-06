@@ -69,7 +69,7 @@ class U2fSubscriber implements EventSubscriberInterface
      *
      * @param InteractiveLoginEvent $event
      */
-    public function onSecurityInteractiveLogin(InteractiveLoginEvent $event): void
+    public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {
         $user = $event->getAuthenticationToken()->getUser();
 
@@ -107,7 +107,7 @@ class U2fSubscriber implements EventSubscriberInterface
      *
      * @param GetResponseEvent $event
      */
-    public function onKernelRequest(GetResponseEvent $event): void
+    public function onKernelRequest(GetResponseEvent $event)
     {
         /*
          * Do nothing if the request isn't a master request and if the securtiy flag hasn't been planted
@@ -155,7 +155,7 @@ class U2fSubscriber implements EventSubscriberInterface
      *
      * @return array
      */
-    public static function getSubscribedEvents(): array
+    public static function getSubscribedEvents()
     {
         return [
             SecurityEvents::INTERACTIVE_LOGIN => 'onSecurityInteractiveLogin',
