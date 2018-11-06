@@ -1,7 +1,6 @@
 Work in progress. Bundle almost finished. Code is ready, now working on tests and readme.
 
-U2F Security Bundle
-===================
+# U2F Security Bundle
 
 This Symfony bundle aim to add a two factor security level to your Symfony project.
 
@@ -11,8 +10,7 @@ This Symfony bundle aim to add a two factor security level to your Symfony proje
 
 Demo : https://github.com/mbarbey/u2f-security-bundle-demo
 
-Overview
---------
+## Overview
 
 If you want to use U2F security keys as second level security, you have 3 options :
 
@@ -24,15 +22,13 @@ This U2F Security Bundle is a wrapper around the [samyoul/u2f-php-server](https:
 
 It move all the complexity to the wrapper and all you need is creating entities, making some calls from your controller, and displaying a beautiful form in a beautiful page. That all (for the basics).
 
-Requirements
-------------
+## Requirements
 
 Before installing this bundle you need to have an already working login and secured area in the Symfony way (aka security bundle, firewall and user entity).
 
 Important point, U2F keys only work on HTTPS requests. So you will need an SSL certificate, even for working on localhost. The good news is that you can use self-signed certificate without problem.
 
-Installation
-------------
+## Installation and configuration
 
 Globally, the installation process can be splitted into three parts :
 
@@ -41,9 +37,6 @@ Globally, the installation process can be splitted into three parts :
 3. Creating controller
 
 Now let's start together !
-
-Installation and configuration
-------------------------------
 
 First you need to install the bundle through composer !
 
@@ -79,8 +72,7 @@ The key `whitelist_routes` is an optional list on routes where the user can stil
 Great ! It was easy uh ? Now let's create some entities.
 
 
-Entities and models
--------------------
+## Entities and models
 
 First, we will create a "key" entity which will store the data of the U2F keys. You have two options :
 
@@ -106,8 +98,7 @@ Next you will have to create an empty registration model which will extends the 
 Bravo, you have made 80% of the work. Now let's do some easier tasks.
 
 
-Registration controller
------------------------
+## Registration controller
 
 We will first allow users to register security keys.
 
@@ -200,8 +191,7 @@ And tadaaaa ! You users can register their security keys and link it to their ac
 
 But ! Registering keys is cool, but it will be better to be authenticated with it.
 
-Authentication controller
--------------------------
+## Authentication controller
 
 Now let's to the same thing for the authentication. Keep in mind that this action must match with your authentication route you defined in the configuration of the bundle.
 
@@ -266,7 +256,7 @@ Here is the JS you must use. Feel free to edit it as you want.
             // Handle returning error data
             if(data.errorCode && data.errorCode != 0) {
                 alert("Authentication failed with error: " + data.errorCode);
-                // Or handle the error however you'd like. 
+                // Or handle the error however you'd like.
 
                 return;
             }
@@ -288,7 +278,160 @@ Here is the JS you must use. Feel free to edit it as you want.
 
 And, congratulation (play success music in the background). Now you users can register some security keys and when they log in, they will be redirected to the authentication page and will be jailed in it until they successfully authenticate with their security key.
 
-Advanced use case
------------------
+## Advanced use cases
 
-Explanation coming soon.
+In the U2F workflows, you can listen these 9 events :
+
+### Registration
+
+1. **U2fPreRegistrationEvent**
+
+You can listen to the event `U2fPreRegistrationEvent::getName()` which is fired when you call the function `canRegister` of the service `U2fSecurity` from your controller.
+
+In you listener, you can use any criteria to decide if the given user is allowed or not to register a security key. You can use the function `abort` of the event to deny to usage of a security key. In this case, the function `canRegister` called in your controller will return the `U2fPreRegistrationEvent` event. You can use it function `isAborted` to know if you should continue the process or not.
+
+Here is an example of usage :
+
+```php
+public function u2fRegistration(Request $request, U2fSecurity $service)
+{
+    /*
+     * We check if there is any listener somewhere which have an objection for the current user registering a new key
+     */
+    $canRegister = $service->canRegister($this->getUser(), $request->getSchemeAndHttpHost());
+    if ($canRegister->isAborted()) {
+        $this->addFlash('warning', $canRegister->getReason());
+        return $this->redirectToRoute('user_register_u2f_denied');
+    }
+
+    /*
+     * The user is allowed to register a key :-)
+     */
+    $registration = new U2fRegistration();
+    $form = $this->createForm(U2fRegistrationType::class, $registration);
+
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+        try {
+            $key = new Key();
+            $key->setName($registration->getName())->setUser($this->getUser());
+            $service->validateRegistration($this->getUser(), $registration, $key);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($key);
+            $em->flush();
+
+            return $this->redirectToRoute('user_details', ['userId' => $this->getUser()->getId()]);
+        } catch (\Exception $e) {
+            $form->get('name')->addError(new FormError($e->getMessage()));
+        }
+    }
+
+    $registrationData = $service->createRegistration($request->getSchemeAndHttpHost());
+
+    return $this->render('security/u2fRegistration.html.twig', array(
+        'jsRequest' => $registrationData['request'],
+        'jsSignatures' => $registrationData['signatures'],
+        'form' => $form->createView(),
+    ));
+}
+
+```
+
+2. **U2fRegistrationSuccessEvent**
+
+You can listen to the event `U2fRegistrationSuccessEvent::getName()` which is fired when a user successfully register a new security key.
+The event contains both the user and the newly registered key.
+
+
+3. **U2fRegistrationFailureEvent**
+
+You can listen to the event `U2fRegistrationFailureEvent::getName()` which is fired when a user fail to register a new security key.
+The event contains both the user and the PHP exception which fired the failure.
+
+4. **U2fPostRegistrationEvent**
+
+You can listen to the event `U2fPostRegistrationEvent::getName()` which is fired after every key registration, no matter if it was a success or a failure.
+The event contains the user, and can contains the newly registered key if the registration was a success.
+
+
+### Authentication
+
+1. **U2fAuthenticationRequiredEvent**
+
+You can listen to the event `U2fAuthenticationRequiredEvent::getName()` which is fired just after a user correctly log in with it credentials **and** if the user has at least one security key registered.
+In you listener, you can use any criteria to decide if the given user must be moved in the U2F jail util he prove his identity or not. You can use the function `abort` of the event to prevent the usage of the U2F jail.
+
+2. **U2fPreAuthenticationEvent**
+
+You can listen to the event `U2fPreAuthenticationEvent::getName()` which is fired when you call the function `canAuthenticate` of the service `U2fSecurity` from your controller.
+
+In you listener, you can use any criteria to decide if the given user is allowed or not to use a security key as two-factor. You can use the function `abort` of the event to deny to usage of a security key. In this case, the function `canAuthenticate` called in your controller will return the `U2fPreAuthenticationEvent` event. You can use it function `isAborted` to know if you should continue the process or not. In the case of a "stop two-factor authentication", you can use the function `stopRequestingAuthentication` from the `U2fSecurity` service to remove the user from the U2F jail.
+
+Here is an example of usage :
+
+```php
+
+public function u2fAuthentication(Request $request, U2fSecurity $service)
+{
+    /*
+     * We check if there is any listener somewhere which have an objection for the current user authenticating with a key
+     */
+    $canAuthenticate = $service->canAuthenticate($request->getSchemeAndHttpHost(), $this->getUser());
+    if ($canAuthenticate->isAborted()) {
+        $service->stopRequestingAuthentication();
+        $this->addFlash('warning', 'Your connection was not secured by a security key');
+        return $this->redirectToRoute('user_list');
+    }
+
+    /*
+     * The user is allowed to use a key :-)
+     */
+    $authentication = new U2fAuthentication();
+    $form = $this->createForm(U2fAuthenticationType::class, $authentication);
+
+    $form->handleRequest($request);
+    if ($form->isSubmitted()) {
+        try {
+            $updatedKey = $service->validateAuthentication($this->getUser(), $authentication);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($updatedKey);
+            $em->flush();
+
+            if ($request->getSession()->has(U2fSubscriber::U2F_SECURITY_KEY)) {
+                $request->getSession()->remove(U2fSubscriber::U2F_SECURITY_KEY);
+            }
+
+            return $this->redirectToRoute('user_list');
+        } catch (\Exception $e) {
+            $this->addFlash('danger', 'Authentication failed');
+        }
+    }
+
+    $authenticationRequest = $service->createAuthentication($request->getSchemeAndHttpHost(), $this->getUser());
+
+    return $this->render('security/u2fAuthentication.html.twig', array(
+        'authenticationRequest' => $authenticationRequest,
+        'form' => $form->createView()
+    ));
+}
+```
+
+3. **U2fAuthenticationSuccessEvent**
+
+You can listen to the event `U2fAuthenticationSuccessEvent::getName()` which is fired when a user successfully authenticate with a security key.
+The event contains both the user and the used key.
+
+
+4. **U2fAuthenticationFailureEvent**
+
+You can listen to the event `U2fAuthenticationFailureEvent::getName()` which is fired when a user fail to authenticatie with a security key.
+The event contains the user, the PHP exception which fired the failure and the counter of authentication failure. This counter is cleared when the user finally authenticate itself correctly.
+
+5. **U2fPostAuthenticationEvent**
+
+You can listen to the event `U2fPostAuthenticationEvent::getName()` which is fired after every U2F authentication, no matter if it was a success or a failure.
+The event contains the user, a `success` flag, and can contains the user key if the authentication was a success.
+
+You can look at the source code of the [demo](https://github.com/mbarbey/u2f-security-bundle-demo) if you want to see these events in action.
