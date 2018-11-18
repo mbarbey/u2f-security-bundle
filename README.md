@@ -42,32 +42,22 @@ First you need to install the bundle through composer !
 
 `composer require mbarbey/u2f-security-bundle`
 
-Then you need to create the file `config/packages/mbarbey_u2f_security.yml` (because there is no receipe for the moment) and insert the following content :
+After installing the receipe, don't forget to edit the file `config/packages/mbarbey_u2f_security.yaml` to match your own routes.
 
-```yaml
-mbarbey_u2f_security:
-    authentication_route: my_super_route_for_u2f_authentication
-    whitelist_routes:
-        - login
-        - logout
+- The key `authentication_route` is required. It's the route where the users will be jailed until they successfully authenticate with their U2F security key. It must be the route where the U2F authentication will be performed.
 
-```
-
-The key `authentication_route` is required. It's the route where the users will be jailed until they successfully authenticate with their U2F security key. SI tu must be the route where the U2F authentication will be performed.
-
-The key `whitelist_routes` is an optional list on routes where the user can still visit after being logged and and without being authenticated with the two factor security. For example you can whitelist the login and logout routes. These given routes will be added to the following list of already whitelisted routes :
-
-- `_wdt`
-- `_profiler_home`
-- `_profiler_search`
-- `_profiler_search_bar`
-- `_profiler_phpinfo`
-- `_profiler_search_results`
-- `_profiler_open_file`
-- `_profiler`
-- `_profiler_router`
-- `_profiler_exception`
-- `_profiler_exception_css`
+- The key `whitelist_routes` is an optional list on routes where the user can still visit after being logged and and without being authenticated with the two factor security. For example you can whitelist the login and logout routes. These given routes will be autmatically added to the following list of already whitelisted routes :
+    - `_wdt`
+    - `_profiler_home`
+    - `_profiler_search`
+    - `_profiler_search_bar`
+    - `_profiler_phpinfo`
+    - `_profiler_search_results`
+    - `_profiler_open_file`
+    - `_profiler`
+    - `_profiler_router`
+    - `_profiler_exception`
+    - `_profiler_exception_css`
 
 Great ! It was easy uh ? Now let's create some entities.
 
