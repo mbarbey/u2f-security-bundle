@@ -421,5 +421,3 @@ The event contains the user, the PHP exception which fired the failure and the c
 
 You can listen to the event `U2fPostAuthenticationEvent::getName()` which is fired after every U2F authentication, no matter if it was a success or a failure.
 The event contains the user, a `success` flag, and can contains the user key if the authentication was a success.
-
-You can look at the source code of the [demo](https://github.com/mbarbey/u2f-security-bundle-demo) if you want to see these events in action.
